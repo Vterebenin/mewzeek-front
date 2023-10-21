@@ -27,7 +27,6 @@ function Registration() {
         password,
         passwordConfirmation,
         name,
-        photo: "123qwe.png",
       });
       console.log("created");
     } catch (e: unknown) {
