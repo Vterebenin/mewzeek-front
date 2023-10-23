@@ -15,3 +15,11 @@ interface ErrorData {
   status: string;
   errors?: ValidationErrorObject;
 }
+interface RouteError {
+  message?: string;
+  statusText?: string;
+}
+
+interface RouteIdToPathMapper {
+  [key: string]: string | undefined;
+}

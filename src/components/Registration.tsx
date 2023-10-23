@@ -7,10 +7,10 @@ const http = axios.create({
 });
 
 function Registration() {
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<ValidationErrorObject>({});
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setErrors([]);
+    setErrors({});
     const target = e.target as typeof e.target & {
       email: { value: string };
       password: { value: string };
@@ -28,14 +28,12 @@ function Registration() {
         passwordConfirmation,
         name,
       });
-      console.log("created");
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         const data: ErrorData = e?.response?.data;
         if (data.errors) {
           setErrors(data.errors);
         }
-        console.log(data);
       }
     }
   };
@@ -51,7 +49,7 @@ function Registration() {
             id="email"
             name="email"
             placeholder="Email"
-            isInvalid={errors.email}
+            isInvalid={!!errors.email}
           />
         </div>
         <div className="flex gap-1 flex-col">
@@ -60,7 +58,7 @@ function Registration() {
             id="name"
             name="name"
             placeholder="Name"
-            isInvalid={errors.name}
+            isInvalid={!!errors.name}
           />
         </div>
         <div className="flex gap-1 flex-col">
@@ -70,7 +68,7 @@ function Registration() {
             name="password"
             placeholder="Password"
             type="password"
-            isInvalid={errors.password}
+            isInvalid={!!errors.password}
           />
         </div>
         <div className="flex gap-1 flex-col">
@@ -80,7 +78,7 @@ function Registration() {
             name="passwordConfirmation"
             placeholder="Password confirmation"
             type="password"
-            isInvalid={errors.password}
+            isInvalid={!!errors.password}
           />
         </div>
         <Button type="submit">Submit</Button>
