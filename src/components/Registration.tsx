@@ -1,26 +1,41 @@
+import http from "@/api/http";
 import { Button, Input } from "@chakra-ui/react";
-import axios, { AxiosError } from "axios";
-import { useState } from "react";
+import { AxiosError } from "axios";
+import { ChangeEvent, useState } from "react";
+import TheInput from "@/components/common/TheInput";
 
-const http = axios.create({
-  baseURL: "http://localhost:8000/api/",
-});
-
+interface RegistrationForm {
+  email: string;
+  password: string;
+  name: string;
+  passwordConfirmation: string;
+}
+const DEFAULT_FORM = {
+  email: "",
+  password: "",
+  name: "",
+  passwordConfirmation: "",
+};
 function Registration() {
   const [errors, setErrors] = useState<ValidationErrorObject>({});
+  const [form, setForm] = useState<RegistrationForm>({ ...DEFAULT_FORM });
+  const handleChange = (e: ChangeEvent) => {
+    const { name, value } = e.target as typeof e.target & {
+      name: string;
+      value: string;
+    };
+    const newErrors = { ...errors };
+    delete newErrors[name];
+    setErrors(newErrors);
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setErrors({});
-    const target = e.target as typeof e.target & {
-      email: { value: string };
-      password: { value: string };
-      name: { value: string };
-      passwordConfirmation: { value: string };
-    };
-    const email = target.email.value; // typechecks!
-    const password = target.password.value; // typechecks!
-    const name = target.name.value; // typechecks!
-    const passwordConfirmation = target.passwordConfirmation.value; // typechecks!
+    const { email, password, passwordConfirmation, name } = form;
     try {
       await http.post("auth/register", {
         email,
@@ -38,49 +53,53 @@ function Registration() {
     }
   };
   return (
-    <div className="mx-auto flex justify-center items-center h-[100vh]">
+    <div className="mx-auto flex justify-center items-center min-h-[100vh]">
       <form
         onSubmit={(e: React.SyntheticEvent) => onSubmit(e)}
-        className="flex gap-4 flex-col"
+        className="flex gap-4 flex-col max-w-[500px] w-full"
       >
-        <div className="flex gap-1 flex-col">
-          <label htmlFor="email">Email</label>
-          <Input
-            id="email"
-            name="email"
-            placeholder="Email"
-            isInvalid={!!errors.email}
-          />
-        </div>
-        <div className="flex gap-1 flex-col">
-          <label htmlFor="name">Name</label>
-          <Input
-            id="name"
-            name="name"
-            placeholder="Name"
-            isInvalid={!!errors.name}
-          />
-        </div>
-        <div className="flex gap-1 flex-col">
-          <label htmlFor="password">Password</label>
-          <Input
-            id="password"
-            name="password"
-            placeholder="Password"
-            type="password"
-            isInvalid={!!errors.password}
-          />
-        </div>
-        <div className="flex gap-1 flex-col">
-          <label htmlFor="passwordConfirmation">Password</label>
-          <Input
-            id="passwordConfirmation"
-            name="passwordConfirmation"
-            placeholder="Password confirmation"
-            type="password"
-            isInvalid={!!errors.password}
-          />
-        </div>
+        <TheInput
+          className="flex gap-1 flex-col"
+          name="email"
+          value={form.email}
+          onChange={(e) => handleChange(e)}
+          placeholder="Email"
+          label="Email"
+          isInvalid={!!errors.email}
+          errorText={errors.email}
+        />
+        <TheInput
+          className="flex gap-1 flex-col"
+          name="name"
+          placeholder="Name"
+          label="Name"
+          value={form.name}
+          onChange={(e) => handleChange(e)}
+          isInvalid={!!errors.name}
+          errorText={errors.name}
+        />
+        <TheInput
+          className="flex gap-1 flex-col"
+          name="password"
+          label="Password"
+          placeholder="Password"
+          type="password"
+          value={form.password}
+          onChange={(e) => handleChange(e)}
+          isInvalid={!!errors.password}
+          errorText={errors.password}
+        />
+        <TheInput
+          className="flex gap-1 flex-col"
+          name="passwordConfirmation"
+          label="Password confirmation"
+          placeholder="Password confirmation"
+          type="password"
+          value={form.passwordConfirmation}
+          onChange={(e) => handleChange(e)}
+          isInvalid={!!errors.password}
+          errorText={errors.password}
+        />
         <Button type="submit">Submit</Button>
       </form>
     </div>
