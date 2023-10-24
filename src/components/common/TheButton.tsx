@@ -1,3 +1,4 @@
+import { BUTTON_TYPES } from "@/const/general";
 import { Button } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,12 +7,14 @@ interface TheButtonProps {
   children?: React.ReactElement | string;
   to?: string;
   onClick?: React.MouseEventHandler;
-  className?: string;
+  [key: string]: unknown;
 }
-function TheButton({ children, to, onClick, className }: TheButtonProps) {
+function TheButton({ children, to, onClick, ...args }: TheButtonProps) {
   const navigate = useNavigate();
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+    if (args.type !== BUTTON_TYPES.SUBMIT) {
+      e.preventDefault();
+    }
     if (to) {
       navigate(to);
     }
@@ -20,7 +23,7 @@ function TheButton({ children, to, onClick, className }: TheButtonProps) {
     }
   };
   return (
-    <Button onClick={(e) => handleClick(e)} className={className}>
+    <Button onClick={(e) => handleClick(e)} {...args}>
       {children}
     </Button>
   );

@@ -1,8 +1,11 @@
 import http from "@/api/http";
-import { Button, Input } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import { AxiosError } from "axios";
 import { ChangeEvent, useState } from "react";
 import TheInput from "@/components/common/TheInput";
+import TheButton from "@/components/common/TheButton";
+import { Form } from "react-router-dom";
+import { TOSTER } from "@/const/general";
 
 interface RegistrationForm {
   email: string;
@@ -18,7 +21,9 @@ const DEFAULT_FORM = {
 };
 function Registration() {
   const [errors, setErrors] = useState<ValidationErrorObject>({});
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState<RegistrationForm>({ ...DEFAULT_FORM });
+  const toast = useToast();
   const handleChange = (e: ChangeEvent) => {
     const { name, value } = e.target as typeof e.target & {
       name: string;
@@ -37,6 +42,7 @@ function Registration() {
     setErrors({});
     const { email, password, passwordConfirmation, name } = form;
     try {
+      setLoading(true);
       await http.post("auth/register", {
         email,
         password,
@@ -44,17 +50,22 @@ function Registration() {
         name,
       });
     } catch (e: unknown) {
+      console.log(e);
       if (e instanceof AxiosError) {
         const data: ErrorData = e?.response?.data;
         if (data.errors) {
           setErrors(data.errors);
+        } else if (data.message) {
+          toast(TOSTER.CONFLICT_REGISTRATION);
         }
       }
+    } finally {
+      setLoading(false);
     }
   };
   return (
-    <div className="mx-auto flex justify-center items-center min-h-[100vh]">
-      <form
+    <div className="mx-auto flex justify-center items-center">
+      <Form
         onSubmit={(e: React.SyntheticEvent) => onSubmit(e)}
         className="flex gap-4 flex-col max-w-[500px] w-full"
       >
@@ -100,8 +111,10 @@ function Registration() {
           isInvalid={!!errors.password}
           errorText={errors.password}
         />
-        <Button type="submit">Submit</Button>
-      </form>
+        <TheButton isLoading={loading} loadingText="Submitting" type="submit">
+          Submit
+        </TheButton>
+      </Form>
     </div>
   );
 }
