@@ -4,10 +4,18 @@ export const BUTTON_TYPES = {
   SUBMIT: "submit",
 };
 
+// todo make default props like duration and is closable?
 export const TOSTER: Toster = {
   CONFLICT_REGISTRATION: {
-    title: "Account wasn't created.",
-    description: "Email already exists in the system.",
+    title: "Can't Sign Up!",
+    description: "Email already exists in the system",
+    status: "error",
+    duration: 10000,
+    isClosable: true,
+  },
+  INVALID_EMAIL_OR_PSWD: {
+    title: "Cant Sign In!",
+    description: "Invalid email or password",
     status: "error",
     duration: 10000,
     isClosable: true,

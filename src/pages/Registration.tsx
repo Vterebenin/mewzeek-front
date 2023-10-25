@@ -1,11 +1,10 @@
 import http from "@/api/http";
-import { useToast } from "@chakra-ui/react";
 import { AxiosError } from "axios";
 import { ChangeEvent, useState } from "react";
 import TheInput from "@/components/common/TheInput";
 import TheButton from "@/components/common/TheButton";
 import { Form } from "react-router-dom";
-import { TOSTER } from "@/const/general";
+import { ErrorData, ValidationErrorObject } from "@/vite-env";
 
 interface RegistrationForm {
   email: string;
@@ -23,7 +22,6 @@ function Registration() {
   const [errors, setErrors] = useState<ValidationErrorObject>({});
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState<RegistrationForm>({ ...DEFAULT_FORM });
-  const toast = useToast();
   const handleChange = (e: ChangeEvent) => {
     const { name, value } = e.target as typeof e.target & {
       name: string;
@@ -50,13 +48,10 @@ function Registration() {
         name,
       });
     } catch (e: unknown) {
-      console.log(e);
       if (e instanceof AxiosError) {
         const data: ErrorData = e?.response?.data;
         if (data.errors) {
           setErrors(data.errors);
-        } else if (data.message) {
-          toast(TOSTER.CONFLICT_REGISTRATION);
         }
       }
     } finally {

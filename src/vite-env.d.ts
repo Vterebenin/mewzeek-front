@@ -27,7 +27,15 @@ interface RouteIdToPathMapper {
 }
 
 interface Toster {
-  [key: string]:
-    | UseToastOptions
-    | ((...args: string[]) => UseToastOptions)
+  [key: string]: UseToastOptions | ((...args: string[]) => UseToastOptions);
+}
+
+interface User {
+  createdAt: string;
+  email: string;
+  id: string;
+  name: string;
+  role: string;
+  updatedAt: string;
+  verified: boolean;
 }
