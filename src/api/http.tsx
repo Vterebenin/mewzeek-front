@@ -29,7 +29,6 @@ http.interceptors.response.use(
       const data: ErrorData = error?.response?.data;
       if (data.message! in MSG_TO_TOSTER_MAPPER) {
         const message = data.message as string;
-
         toast(MSG_TO_TOSTER_MAPPER[message] as UseToastOptions);
       }
     }

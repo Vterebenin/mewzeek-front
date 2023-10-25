@@ -24,4 +24,5 @@ export const TOSTER: Toster = {
 
 export const MSG_TO_TOSTER_MAPPER: Toster = {
   email_conflict: TOSTER.CONFLICT_REGISTRATION,
+  incorrect_email_or_password: TOSTER.INVALID_EMAIL_OR_PSWD,
 };
