@@ -1,1 +1,3 @@
-export const SHOW_TOAST = 'toaster/showToast';
+export const STORES = {
+  USER: "user",
+};

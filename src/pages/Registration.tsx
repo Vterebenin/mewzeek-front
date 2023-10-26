@@ -3,8 +3,9 @@ import { AxiosError } from "axios";
 import { ChangeEvent, useState } from "react";
 import TheInput from "@/components/common/TheInput";
 import TheButton from "@/components/common/TheButton";
-import { Form } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import { ErrorData, ValidationErrorObject } from "@/vite-env";
+import { PATHS } from "@/router";
 
 interface RegistrationForm {
   email: string;
@@ -19,6 +20,7 @@ const DEFAULT_FORM = {
   passwordConfirmation: "",
 };
 function Registration() {
+  const navigate = useNavigate();
   const [errors, setErrors] = useState<ValidationErrorObject>({});
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState<RegistrationForm>({ ...DEFAULT_FORM });
@@ -47,6 +49,7 @@ function Registration() {
         passwordConfirmation,
         name,
       });
+      navigate(PATHS.SIGN_IN);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         const data: ErrorData = e?.response?.data;

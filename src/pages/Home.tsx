@@ -1,23 +1,18 @@
-import http from "@/api/http";
-import { User } from "@/vite-env";
-import { useEffect, useState } from "react";
+import userStore from "@/stores/userStore";
+import { useEffect } from "react";
 
 function Home() {
-  const [user, setUser] = useState<User>();
-  const getUser = async () => {
-    const { data } = await http.get("users/me");
-    setUser(data);
-  };
+  const { user, getUser } = userStore();
   useEffect(() => {
     getUser();
-  }, []);
+  }, [getUser]);
   return (
     <>
       {user && (
         <>
+          <div>{user.name}</div>
           <div>{user.email}</div>
-          <div>{user.email}</div>
-          <div>{user.email}</div>
+          <div>{user.createdAt}</div>
         </>
       )}
     </>
