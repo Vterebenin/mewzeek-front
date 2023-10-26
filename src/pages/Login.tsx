@@ -6,7 +6,7 @@ import TheButton from "@/components/common/TheButton";
 import { Form, useNavigate } from "react-router-dom";
 import { ErrorData, ValidationErrorObject } from "@/vite-env";
 import Cookies from "js-cookie";
-import { PATHS } from "@/router";
+import { PATHS } from "@/const/general";
 
 interface LoginForm {
   email: string;

@@ -5,13 +5,8 @@ import Registration from "@/pages/Registration";
 import Login from "@/pages/Login";
 import Home from "@/pages/Home";
 import Main from "@/pages/Main";
+import { PATHS } from "@/const/general";
 
-export const PATHS = {
-  BASE: "/",
-  SIGN_IN: "/sign-in",
-  SIGN_UP: "/sign-up",
-  HOME: "/home",
-};
 
 export const router = createBrowserRouter([
   {

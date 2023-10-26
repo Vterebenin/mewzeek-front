@@ -1,5 +1,5 @@
 import TheButton from "@/components/common/TheButton";
-import { PATHS } from "@/router";
+import { PATHS } from "@/const/general";
 import userStore from "@/stores/userStore";
 import { Link, useNavigate } from "react-router-dom";
 

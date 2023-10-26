@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import { CreateStandAloneToastParam, UseToastOptions } from "@chakra-ui/react";
+import { UseToastOptions } from "@chakra-ui/react";
 
 interface ValidationErrorItem {
   code: string;

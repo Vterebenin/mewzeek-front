@@ -5,7 +5,7 @@ import TheInput from "@/components/common/TheInput";
 import TheButton from "@/components/common/TheButton";
 import { Form, useNavigate } from "react-router-dom";
 import { ErrorData, ValidationErrorObject } from "@/vite-env";
-import { PATHS } from "@/router";
+import { PATHS } from "@/const/general";
 
 interface RegistrationForm {
   email: string;

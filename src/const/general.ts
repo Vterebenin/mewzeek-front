@@ -4,6 +4,13 @@ export const BUTTON_TYPES = {
   SUBMIT: "submit",
 };
 
+export const PATHS = {
+  BASE: "/",
+  SIGN_IN: "/sign-in",
+  SIGN_UP: "/sign-up",
+  HOME: "/home",
+};
+
 // todo make default props like duration and is closable?
 export const TOSTER: Toster = {
   CONFLICT_REGISTRATION: {
