@@ -9,6 +9,7 @@ export const PATHS = {
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
   HOME: "/home",
+  LAB: "/app/lab",
 };
 
 // todo make default props like duration and is closable?

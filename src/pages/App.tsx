@@ -8,7 +8,9 @@ function App() {
     <>
       <div className="min-h-[100vh]">
         <Navigation />
-        <Outlet />
+        <div className="max-w-[1280px] mx-auto">
+          <Outlet />
+        </div>
         <ToastContainer />
       </div>
     </>
