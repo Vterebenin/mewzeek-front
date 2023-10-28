@@ -1,7 +1,9 @@
+import Piano from "@/components/common/piano/Piano";
+
 function Lab() {
   return (
     <>
-      123qwe we are in the lab?
+      <Piano />
     </>
   );
 }
