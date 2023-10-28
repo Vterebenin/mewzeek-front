@@ -3,11 +3,6 @@ import { ReactJSXElement } from "node_modules/@emotion/react/types/jsx-namespace
 import { useState } from "react";
 import * as Tone from "tone";
 
-interface OctaveItem {
-  note: string;
-  releaser: string;
-  style: string;
-}
 const getOctave = (oct: number) => [
   { note: `C${oct}`, releaser: "8n", style: s.whiteKey },
   { note: `Db${oct}`, releaser: "8n", style: s.blackKey },
@@ -26,7 +21,7 @@ const getOctave = (oct: number) => [
 function Piano() {
   const [currentNote, setCurrentNote] = useState<string | null>(null);
   const [activeKeys, setActiveKeys] = useState<string[]>([]);
-  const [synth, _] = useState(new Tone.Synth().toDestination());
+  const [synth] = useState(new Tone.Synth().toDestination());
   const [isMouseDown, setIsMouseDown] = useState(false);
   const mapOctaves = (...octs: number[]) => {
     let octaves: ReactJSXElement[] = [];
