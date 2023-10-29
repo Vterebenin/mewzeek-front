@@ -1,6 +1,6 @@
 import s from "@/components/common/piano/piano.module.css";
 import { ReactJSXElement } from "node_modules/@emotion/react/types/jsx-namespace";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import * as Tone from "tone";
 
 const getOctave = (oct: number) => [
@@ -21,7 +21,6 @@ const getOctave = (oct: number) => [
 function Piano() {
   const [currentNote, setCurrentNote] = useState<string | null>(null);
   const [activeKeys, setActiveKeys] = useState<string[]>([]);
-  const [synth] = useState(new Tone.Synth().toDestination());
   const [isMouseDown, setIsMouseDown] = useState(false);
   const mapOctaves = (...octs: number[]) => {
     let octaves: ReactJSXElement[] = [];
@@ -32,36 +31,52 @@ function Piano() {
     return octaves;
   };
 
-  const handleMouseDown = (key: string) => {
-    setIsMouseDown(true);
-    console.log(currentNote, activeKeys, "attack");
-    setActiveKeys([...activeKeys, key]);
-    const note = key; // Replace with your note mapping
-    synth.triggerAttack(note);
-    setCurrentNote(note);
-  };
-
-  const handleMouseEnter = (key: string) => {
-    if (!isMouseDown) return;
-    if (activeKeys.length > 0) {
-      setActiveKeys([key]);
+  const [synth] = useState(
+    new Tone.PolySynth(Tone.Synth, {
+      oscillator: {
+        partials: [0, 2, 3, 4],
+      },
+    }).toDestination(),
+  );
+  synth.debug = true;
+  const handleMouseDown = useCallback(
+    (key: string) => {
+      setIsMouseDown(true);
+      setActiveKeys([...activeKeys, key]);
       const note = key; // Replace with your note mapping
-      if (note !== currentNote && currentNote) {
-        synth.triggerRelease(Tone.now() + 0.1);
-        synth.triggerAttack(note);
-        setCurrentNote(note);
+      synth.triggerAttack(note);
+      setCurrentNote(note);
+      console.log(synth);
+    },
+    [synth, activeKeys],
+  );
+
+  const handleMouseOver = useCallback(
+    (key: string) => {
+      if (!isMouseDown) return;
+      if (activeKeys.length > 0) {
+        setActiveKeys([key]);
+        const note = key; // Replace with your note mapping
+        if (note !== currentNote && currentNote) {
+          synth.triggerRelease(note);
+          synth.triggerAttack(note);
+          setCurrentNote(note);
+        }
       }
-    }
-  };
-  const handleMouseUp = () => {
-    console.log(currentNote, activeKeys, "release", synth);
-    setActiveKeys([]);
-    if (currentNote) {
-      synth.triggerRelease(Tone.now() + 0.1);
-      setCurrentNote(null);
-    }
-    setIsMouseDown(false);
-  };
+    },
+    [synth, isMouseDown, activeKeys, currentNote],
+  );
+  const handleMouseUp = useCallback(
+    (note: string) => {
+      setActiveKeys([]);
+      if (currentNote) {
+        synth.triggerRelease(note);
+        setCurrentNote(null);
+      }
+      setIsMouseDown(false);
+    },
+    [synth, currentNote],
+  );
 
   const handleMouseOut = (note: string) => {
     const keys = [...activeKeys];
@@ -72,7 +87,7 @@ function Piano() {
     setActiveKeys(keys);
 
     if (note) {
-      synth.triggerRelease(Tone.now() + 0.1);
+      synth.triggerRelease(note);
     }
   };
   const getOctaveItems = (octave: number) =>
@@ -83,8 +98,8 @@ function Piano() {
         }`}
         key={item.note}
         onMouseDown={() => handleMouseDown(item.note)}
-        onMouseEnter={() => handleMouseEnter(item.note)}
-        onMouseUp={() => handleMouseUp()}
+        onMouseOver={() => handleMouseOver(item.note)}
+        onMouseUp={() => handleMouseUp(item.note)}
         onMouseOut={() => handleMouseOut(item.note)}
         draggable="false"
         // onClick={() => playSynthTone(item)}
