@@ -1,35 +1,25 @@
+import OctavesSelector from "@/components/common/OctavesSelector";
 import Piano from "@/components/common/piano/Piano";
+import { useState } from "react";
 import * as Tone from "tone";
-const synth = new Tone.PolySynth().toDestination();
-
-function MyPiano() {
-  const playNote = (note: string) => {
-    synth.triggerAttack(note);
-  };
-
-  const releaseNote = (note: string) => {
-    synth.triggerRelease(note);
-  };
-
-  return (
-    <div>
-      <button
-        onMouseDown={() => playNote("C4")}
-        onMouseUp={() => releaseNote("C4")}
-      >
-        Play C4
-      </button>
-      {/* Add more buttons for other notes */}
-    </div>
-  );
-}
 
 function Lab() {
+  const synth = new Tone.PolySynth(Tone.Synth, {
+    oscillator: {
+      partials: [0, 2, 3, 4],
+    },
+  }).toDestination();
+
+  const [octaves, setOctaves] = useState<number[]>([4, 5, 7]);
   return (
-    <>
-      <MyPiano />
-      <Piano />
-    </>
+    <div className="flex gap-10">
+      <OctavesSelector
+        value={octaves}
+        onChange={(e) => setOctaves(e)}
+        size="md"
+      />
+      <Piano synth={synth} octaves={octaves} />
+    </div>
   );
 }
 

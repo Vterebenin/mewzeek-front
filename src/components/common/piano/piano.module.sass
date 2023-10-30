@@ -1,0 +1,26 @@
+$size: 3
+
+.piano 
+  display: flex
+  justify-content: center
+  overflow: auto
+  user-select: none
+
+.whiteKey
+  border: 1px solid #000
+  width: calc(10px * $size)
+  height: calc(40px * $size)
+  background-color: #fff
+  user-select: none
+
+.blackKey
+  background-color: #000
+  width: calc(6px * $size)
+  height: calc(25px * $size)
+  margin-left: calc(-3px * $size)
+  margin-right: calc(-3px * $size)
+  z-index: 1
+  user-select: none
+
+.active
+  background-color: red
